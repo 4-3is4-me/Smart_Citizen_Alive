@@ -19,7 +19,7 @@ import java.io.InputStream;
 import java.io.OutputStream; 
 import java.io.IOException; 
 
-public class SmartCitizenDashboard extends PApplet {
+public class Smart_Citizen_Alive extends PApplet {
 
 /*
 Dashboard for Smart Citizen kit data by Tim Wornell,
@@ -756,9 +756,9 @@ class SmartCitizen {
     //object for the calendar  - See https://docs.oracle.com/javase/7/docs/api/java/util/Calendar.html
     Calendar mycal = Calendar.getInstance();
     // setting the dates as the Calendar is unreliable - giving the wrong dates sometimes!
-    mycal.set(Calendar.YEAR, year());
-    mycal.set(Calendar.MONTH, month());
-    mycal.set(Calendar.DAY_OF_MONTH, day());
+    //mycal.set(Calendar.YEAR, year());
+    //mycal.set(Calendar.MONTH, month());
+    //mycal.set(Calendar.DAY_OF_MONTH, day());
     
     // making the enddate string for tomorrow - which calls the latest readings from today
     int chkday = mycal.get(Calendar.DAY_OF_MONTH);
@@ -932,7 +932,7 @@ class SmartCitizen {
 }
   public void settings() {  fullScreen(); }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "--present", "--window-color=#666666", "--hide-stop", "SmartCitizenDashboard" };
+    String[] appletArgs = new String[] { "--present", "--window-color=#666666", "--hide-stop", "Smart_Citizen_Alive" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {
