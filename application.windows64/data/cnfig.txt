@@ -1,2 +1,0 @@
-Auth code goes here
-kit id goes here
