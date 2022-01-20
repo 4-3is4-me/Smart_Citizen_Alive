@@ -27,12 +27,10 @@ class SmartCitizen {
     mynumberofdays = numberofdays;
     
     //object for the calendar  - See https://docs.oracle.com/javase/7/docs/api/java/util/Calendar.html
+    // DAY_OF_MONTH is 1 to 28, 29, 30 or 31
+    // MONTH is 0 to 11
     Calendar mycal = Calendar.getInstance();
-    // setting the dates as the Calendar is unreliable - giving the wrong dates sometimes!
-    //mycal.set(Calendar.YEAR, year());
-    //mycal.set(Calendar.MONTH, month());
-    //mycal.set(Calendar.DAY_OF_MONTH, day());
-    
+
     // making the enddate string for tomorrow - which calls the latest readings from today
     int chkday = mycal.get(Calendar.DAY_OF_MONTH);
     mycal.roll(Calendar.DAY_OF_MONTH, 1);   // increment the day by 1 to get to tomorrow
@@ -40,24 +38,26 @@ class SmartCitizen {
     if (tomorrow == 1){                // if tomorrow is a new month
       mycal.roll(Calendar.MONTH, 1);   // increment the month by 1
       int newmonth = mycal.get(Calendar.MONTH);
-      if (newmonth == 1){               // if new month is January
+      if (newmonth == 0){               // if new month is January (0)
         mycal.roll(Calendar.YEAR, 1);  // increment the year by 1
       }
     }
-    String myenddate = str((mycal.get(Calendar.YEAR)))+"-"+str((mycal.get(Calendar.MONTH)))+"-"+str((mycal.get(Calendar.DAY_OF_MONTH)));
+    // Add 1 to the month to change from 0-11 to 1-12
+    String myenddate = str((mycal.get(Calendar.YEAR)))+"-"+str((mycal.get(Calendar.MONTH)+1))+"-"+str((mycal.get(Calendar.DAY_OF_MONTH)));
     //println("End date "+myenddate);
     
     // Making the start date string for today less numberofdays
     mycal.roll(Calendar.DAY_OF_MONTH, -(numberofdays+1));  // taking an extra 1 away as we already incremented the calendar day above
     int strday = mycal.get(Calendar.DAY_OF_MONTH);
-    if ( strday > chkday){            // if we have rolled the calender back to the end of the last month
+    if (strday > chkday){            // if we have rolled the calender back to the end of the last month
       mycal.roll(Calendar.MONTH, -1);  // decrement the month by 1
       int oldmonth = mycal.get(Calendar.MONTH);
-      if (oldmonth == 12){              // if we have rolled back to Decemeber
+      if (oldmonth == 11){              // if we have rolled back to Decemeber
         mycal.roll(Calendar.YEAR, -1);    // decrement the year by 1
       }
     }
-    String mystartdate = str((mycal.get(Calendar.YEAR)))+"-"+str((mycal.get(Calendar.MONTH)))+"-"+str((mycal.get(Calendar.DAY_OF_MONTH)));
+    // Add 1 to the month to change from 0-11 to 1-12
+    String mystartdate = str((mycal.get(Calendar.YEAR)))+"-"+str((mycal.get(Calendar.MONTH)+1))+"-"+str((mycal.get(Calendar.DAY_OF_MONTH)));
     //println("start date "+mystartdate);
     
     
@@ -163,7 +163,7 @@ class SmartCitizen {
           (new InputStreamReader(connection.getInputStream()));
         }
         catch (IOException e) {
-        println(e);
+        //println(e);
         }
       int status = connection.getResponseCode();
       InputStream in;
@@ -191,6 +191,7 @@ class SmartCitizen {
         }  
         catch (IOException e) {
           println(" > Error: " + e);
+          
         }
       }  
       catch (IOException e) {

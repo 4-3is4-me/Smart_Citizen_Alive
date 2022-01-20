@@ -92,13 +92,20 @@ void setup(){
   sensornums.set("PM10", 88);
   sensornums.set("Humidity", 56);
   sensornums.set("Temperature", 55);
-  
+
+  fill(0);
+  rect(0, 0, width, height);
+  fill(255);
+  textSize(height*0.10);
+  textAlign(CENTER);
+  text("Smart Citizen Data Loading...", width*0.5, height*0.5);
   
   String datapath = dataPath("");
   String fullpath = datapath + "\\cnfig.txt";
   String[] config = loadStrings(fullpath);
-  Oauthcode = config[0];
+  Oauthcode = config[0];  
   kitID = int(config[1]);
+  
   rollup = 4; // average every 4 hours for history data
   numberofdays = 3;
   
@@ -112,20 +119,17 @@ void setup(){
   ex4 = targetX;
   ey4 = targetY-5;
   
-  fill(0);
-  rect(0, 0, width, height);
-  fill(255);
-  textSize(height*0.10);
-  textAlign(CENTER);
-  text("Smart Citizen Data Loading...", width*0.5, height*0.5);
-  
-  getlatst();
-  getinfo();
-  gethills();
+  try {  
+    getlatst();
+    getinfo();
+    gethills();
+  } catch (Exception error){
+    exit();
+  }
 }
 
 void draw(){
-  
+
   if (millis() - lastupdate > (updateinterval*1000)) {
     getlatst();
     getinfo();
@@ -628,6 +632,9 @@ void mousePressed(){
 
 ///////// called when a key is typed ////////////
 void keyPressed() {
+  if ((key == ESC) || (key == 'q')){
+    exit();
+  }
   if (mouse){
     // If the return key is pressed, save the String and clear it
     if (key == ENTER) {
