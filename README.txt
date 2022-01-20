@@ -7,8 +7,7 @@ with tutoring, code and inspiration from Lee at Plymouth College of Art as part 
 # Hit enter to confirm the choices.
 # If a bad kit ID or one that is offline is entered, the kit will remain the same and only the number of days will be entered.
 # Click your mouse again to hide the overlay.
-# Enter authcode as first line of "cnfig.txt" in "data" folder, get this from your profile on smartcitizen.me
-# Enter default kitId as second line of "cnfig.txt" in data folder, get this from your profile on smartcitizen.me
+# Enter default kitId as first line of "cnfig.txt" in data folder, get this from your kit URL on smartcitizen.me
 */
 
 
@@ -20,9 +19,7 @@ Unzip Smart_Citizen_Alive.zip.
 
 Open the unzipped Smart_Citizen_Alive folder, open the 'data' folder and open the 'cnfig.txt' file. 
 
-On the first line of cnfig.txt add the OAuth code from your profile on smartcitizen.me.
-
-On the second line of cnfig.txt add the defaul kit ID you wish to use, again from smartcitizen.me.
+On the first line of cnfig.txt add the defaul kit ID you wish to use, again from smartcitizen.me, the number at the end of the URL for your kit.
 
 Save and close cnfig.txt
 

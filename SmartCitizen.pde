@@ -6,15 +6,13 @@ import javax.net.ssl.SSLPeerUnverifiedException;
 import java.util.Calendar;
 
 
-class SmartCitizen { 
-  String myauthtoken; 
+class SmartCitizen {  
   int mykitID;
   int mysensorID;
   int myrollup;
   int mynumberofdays;
 
-  SmartCitizen(int kitID, String authtoken){
-    myauthtoken = authtoken;
+  SmartCitizen(int kitID){
     mykitID = kitID;
   }
   
@@ -61,7 +59,7 @@ class SmartCitizen {
     //println("start date "+mystartdate);
     
     
-    JSONObject src = getObjectFromAPI("https://api.smartcitizen.me/v0/devices/"+mykitID+"/readings?sensor_id="+mysensorID+"&rollup="+myrollup+"h&from="+mystartdate+"&to="+myenddate+myauthtoken);
+    JSONObject src = getObjectFromAPI("https://api.smartcitizen.me/v0/devices/"+mykitID+"/readings?sensor_id="+mysensorID+"&rollup="+myrollup+"h&from="+mystartdate+"&to="+myenddate);
     JSONArray reply = src.getJSONArray("readings");
     return reply;
   }
@@ -71,7 +69,7 @@ class SmartCitizen {
 ///////////////////////////////// gets the latest readings from all sensors /////////////////////////////////////////////////  
 
   JSONObject getlatest(){
-    JSONObject dataobject = getObjectFromAPI("https://api.smartcitizen.me/v0/devices/"+mykitID+myauthtoken);
+    JSONObject dataobject = getObjectFromAPI("https://api.smartcitizen.me/v0/devices/"+mykitID);
     return dataobject;
   }
   

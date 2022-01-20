@@ -7,14 +7,12 @@ with tutoring, code and inspiration from Lee at Plymouth College of Art as part 
 # Hit enter to confirm the choices.
 # If a bad kit ID or one that is offline is entered, the kit will remain the same and only the number of days will be entered.
 # Click your mouse again to hide the overlay.
-# Enter authcode as first line of "cnfig.txt" in "data" folder, get this from your profile on smartcitizen.me
-# Enter defaulty kitId as second line of "cnfig.txt" in data folder, get this from your profile on smartcitizen.me
+# Enter defaulty kitId as first line of "cnfig.txt" in data folder, get this from your kit URL on smartcitizen.me
 */
 
 //// API class SmartCitizen
 int kitID;
 int lastkitID;
-String Oauthcode;
 int sensorID;
 int rollup;
 int numberofdays;
@@ -103,9 +101,7 @@ void setup(){
   String datapath = dataPath("");
   String fullpath = datapath + "\\cnfig.txt";
   String[] config = loadStrings(fullpath);
-  Oauthcode = config[0];  
-  kitID = int(config[1]);
-  
+  kitID = int(config[0]);
   rollup = 4; // average every 4 hours for history data
   numberofdays = 3;
   
@@ -174,7 +170,7 @@ void draw(){
 
 ////// Function to call the lastest sensor readings from the api and put them in sensorlatst dict as (id:value) //////////
 void getlatst(){
-    SmartCitizen myinfo = new SmartCitizen(kitID, Oauthcode);
+    SmartCitizen myinfo = new SmartCitizen(kitID);
     readingslatest = myinfo.getlatest();
     JSONObject data = readingslatest.getJSONObject("data");
     JSONArray sensors = data.getJSONArray("sensors");
@@ -192,7 +188,7 @@ void getinfo(){
   Float lat = location.getFloat("latitude");
   Float lon = location.getFloat("longitude");
   
-  SmartCitizen myinfo = new SmartCitizen(kitID, Oauthcode);
+  SmartCitizen myinfo = new SmartCitizen(kitID);
   JSONObject times = myinfo.gettimes(lat, lon);  // from metaweather API
   String localtime = times.getString("time");
   String localsunrise = times.getString("sun_rise"); 
@@ -277,7 +273,7 @@ void createtimes(String timestamp, String localtime, String localsunrise, String
 
 ////////////////////// function to get historical api data for each sensor and make y arrays and an x array //////////////
 void gethills(){
-    SmartCitizen myinfo = new SmartCitizen(kitID, Oauthcode);
+    SmartCitizen myinfo = new SmartCitizen(kitID);
     //// makeys(sensor, rollup, numberofdays, map(low value, high value) maps to  >> height*value, height*value
     lightarr = makeys("Light", rollup, numberofdays, 0, 15000, 0.65, 0.55);
     batteryarr = makeys("Battery", rollup, numberofdays, 20, 100, 0.65, 0.50);  
@@ -301,7 +297,7 @@ int[] makeys(String sensorq, int rollupq, int numberofdaysq, int low, int high, 
   int[] returnys = new int[0];
   
   // Pulling the readings from API
-  SmartCitizen myinfo = new SmartCitizen(kitID, Oauthcode);
+  SmartCitizen myinfo = new SmartCitizen(kitID);
   JSONArray hist = myinfo.gethistory(sensornums.get(sensorq), rollupq, numberofdaysq);
   int len = hist.size();
   returnys = expand(returnys, len);
