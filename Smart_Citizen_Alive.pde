@@ -134,25 +134,26 @@ void draw(){
  
   drawsky();
   humidity = sensorlatst.get(str(sensornums.get("Humidity")));
+  float pressure = sensorlatst.get(str(sensornums.get("Pressure")))*10;
   //println(humidity);
   //humidity = 99;
-  if (humidity < 92){
-    rain = false;
+  if (humidity < 99){
+    //rain = false;
     drawsunormoon();
-  }else{
+  } else if (pressure < 1000) {
     rain = true;
   }
  //// drawhill(sensor array, colour, colour, colour) -- Order is back to front, lightest to darkest
  //// drawgas(sensor, red, green, blue, mod)  -- mod changes the amount of screen it takes up
-  drawhill(batteryarr, 175, 175, 175);  
-  drawgas("CO2", 0, 255, 0, 30.0); //green
-  drawgas("TVOC", 255, 255, 255, 10.0); // white
+  //drawhill(batteryarr, 175, 175, 175);  
+  drawgas("CO2", 0, 0, 0, 10.0); //black
+  drawgas("TVOC", 0, 255, 0, 1); // green
   drawgas("PM1", 255, 0, 255, 0.15);  // pink
   drawgas("PM2.5", 255, 255, 0, 0.15); // yellow
   drawgas("PM10", 0, 255, 255, 0.15); //cyan
  
-  drawhill(lightarr, 90, 130, 95);
-  drawhill(temperaturearr, 60, 140, 85);
+  drawhill(lightarr, 70, 140, 95);
+  drawhill(temperaturearr, 60, 160, 85);
   drawhill(humidityarr, 30, 130, 55);
   drawhill(pressurearr, 25, 155, 47);
   drawsea();
@@ -273,17 +274,16 @@ void createtimes(String timestamp, String localtime, String localsunrise, String
 
 ////////////////////// function to get historical api data for each sensor and make y arrays and an x array //////////////
 void gethills(){
-    SmartCitizen myinfo = new SmartCitizen(kitID);
     //// makeys(sensor, rollup, numberofdays, map(low value, high value) maps to  >> height*value, height*value
-    lightarr = makeys("Light", rollup, numberofdays, 0, 15000, 0.65, 0.55);
-    batteryarr = makeys("Battery", rollup, numberofdays, 20, 100, 0.65, 0.50);  
+    lightarr = makeys("Light", rollup, numberofdays, 0, 15000, 0.60, 0.40);
+    //batteryarr = makeys("Battery", rollup, numberofdays, 20, 100, 0.65, 0.50);  
     //noisearr = makeys("Noise", rollup, numberofdays, 0, 100, 0.95, 0.75);
-    pressurearr = makeys("Pressure", rollup, numberofdays, 95, 104, 1, 0.90);
-    humidityarr = makeys("Humidity", rollup, numberofdays, 50, 100, 0.95, 0.65);
-    temperaturearr = makeys("Temperature", rollup, numberofdays, -10, 30, 0.90, 0.55);
+    pressurearr = makeys("Pressure", rollup, numberofdays, 95, 104, 1, 0.80);
+    humidityarr = makeys("Humidity", rollup, numberofdays, 50, 100, 0.95, 0.75);
+    temperaturearr = makeys("Temperature", rollup, numberofdays, -10, 30, 0.85, 0.50);
     
     //making the array of x values
-    int len = batteryarr.length;
+    int len = lightarr.length;
     xpointsarr = expand(xpointsarr, len);
     xpointsarr[0] = -(width/len);  ///first curve vertex point left of the screen by width / number of points in arrray to try to flatten the curve at the edges
     for ( int i = 1; i < (len-1); i++){
@@ -471,8 +471,8 @@ void drawgas(String sensorname, int red, int green, int blue, float mod){
   for(int i = 0; i < gradientSteps; i++){
     float t = map(i,0,gradientSteps,0.0,1.0);
     color interpolatedColor = lerpColor(gas0,gas2,t); 
-    fill(interpolatedColor, 10);
-    rect(0,(height*0.67)-i*gradientHeight,width,(height/200)-(gas/mod)); // 200
+    fill(interpolatedColor, 5);
+    rect(0,(height*0.63)-i*gradientHeight,width,(height/200)-(gas/mod)); // height x 0.67 /200
   }
 }
 
@@ -482,7 +482,7 @@ void drawhill(int[] ys, int red, int green, int blue){
   beginShape();
   noStroke();
   int numberofvertex = ys.length;
-   
+  
   beginShape();
   curveVertex(-(width/numberofvertex),height);  //first is to be duplicated as per instructions...
   curveVertex(-(width/numberofvertex),height);
@@ -684,7 +684,7 @@ void drawlabels(){
     period = "am";
   }
   textSize(height*0.02);
-  fill(255);
+  fill(0);
   textAlign(CENTER);
   text(city+", "+country, width/2, height*0.05);
   text("Latest Data from : "+lastupdatelocal+" "+period+" : CO2 "+sensorlatst.get(str(sensornums.get("CO2")))+" ppm"+" : VOC "+sensorlatst.get(str(sensornums.get("TVOC")))+" ppb"+" : PM10 "+sensorlatst.get(str(sensornums.get("PM10")))+" ug/m3"+" : PM2.5 "+sensorlatst.get(str(sensornums.get("PM2.5")))+" ug/m3"+" : PM1 "+sensorlatst.get(str(sensornums.get("PM1")))+" ug/m3", width/2, height*0.07);
@@ -692,15 +692,17 @@ void drawlabels(){
   text("Noise", width*0.92, height*0.97);
   text(sensorlatst.get(str(sensornums.get("Noise")))+" Db", width*0.92, height*0.99);
   text("Pressure", width*0.92, height*0.89);
-  text(sensorlatst.get(str(sensornums.get("Pressure")))*10+" mPa", width*0.92, height*0.91);
+  float press = round(sensorlatst.get(str(sensornums.get("Pressure")))*10);
+  text(press + " mPa", width*0.92, height*0.91);
+  //text(sensorlatst.get(str(sensornums.get("Pressure")))*10+" mPa", width*0.92, height*0.91);
   text("Humidity", width*0.92, height*0.81);
   text(sensorlatst.get(str(sensornums.get("Humidity")))+" %", width*0.92, height*0.83);
   text("Temperature", width*0.92, height*0.73);
   text(sensorlatst.get(str(sensornums.get("Temperature")))+" C", width*0.92, height*0.75);
   text("Light", width*0.92, height*0.65);
   text(sensorlatst.get(str(sensornums.get("Light")))+" Lux", width*0.92, height*0.67);
-  text("Battery", width*0.92, height*0.57);
-  text(sensorlatst.get(str(sensornums.get("Battery")))+" %", width*0.92, height*0.59);
+  //text("Battery", width*0.92, height*0.57);
+  //text(sensorlatst.get(str(sensornums.get("Battery")))+" %", width*0.92, height*0.59);
   
   text("Enter a Kit ID : "+typing, width*0.05, height*0.05);
   text("Number of days : "+newdays, width*0.05, height*0.07);
