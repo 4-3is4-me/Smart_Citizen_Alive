@@ -152,6 +152,8 @@ void draw() {
   if (humidity < 99) {
     //rain = false;
     drawsunormoon();
+  } else if (humidity > 105) {
+    rain = true;
   } else if (pressure < 1000) {
     rain = true;
   }
@@ -529,10 +531,12 @@ void drawhill(int[] ys, int red, int green, int blue) {
 //// function to draw the 'sea' from noise value ////////
 void drawsea() {
   float noiseadj = sensorlatst.get(str(sensornums.get("Noise")))/1000;  // this one is the noise value not the noise function...
-  noStroke();
-  fill(30, 90, 255);  // sea colour 30,120,230
-  beginShape();
   float seax = seay;
+  noStroke();
+  ///////////////////////////////////////////////////////////
+  fill(40, 130, 230);  // sea colour 
+  beginShape();
+  seax = seay;
   for (float x = 0; x <= width+20; x += 10) {
     float y = map(noise(seax, seay), 0, 1, height*0.99, height*0.90);  // this one is the noise function
     vertex(x, y);
@@ -542,6 +546,36 @@ void drawsea() {
   vertex(width, height);
   vertex(0, height);
   endShape(CLOSE);
+  ///////////////////////////////////////////////////////////
+  
+  /////////////////////////////////////////////////////////////
+  fill(30, 90, 255);  // sea colour 30,120,230
+  beginShape();
+  for (float x = 0; x <= width+20; x += 10) {
+    float y = map(noise(seax, seay), 0, 1, height*0.99, height*0.90);  // this one is the noise function
+    vertex(x, y);
+    seax += noiseadj;
+  }
+  seay += noiseadj/10;       //0.008;
+  vertex(width, height);
+  vertex(0, height);
+  endShape(CLOSE);
+  ///////////////////////////////////////////////////////////
+  
+  ///////////////////////////////////////////////////////////
+  fill(10, 60, 255);  // sea colour 
+  beginShape();
+  seax = seay;
+  for (float x = 0; x <= width+20; x += 10) {
+    float y = map(noise(seax, seay), 0, 1, height*0.99, height*0.90);  // this one is the noise function
+    vertex(x, y);
+    seax += noiseadj;
+  }
+  seay += noiseadj/10;       //0.008;
+  vertex(width, height);
+  vertex(0, height);
+  endShape(CLOSE);
+  ///////////////////////////////////////////////////////////
 }
 
 /////////// draw rain ///////////

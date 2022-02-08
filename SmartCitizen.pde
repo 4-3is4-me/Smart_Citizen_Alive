@@ -100,10 +100,10 @@ class SmartCitizen {
           connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
           connection.setRequestProperty("Accept", "application/json");
           connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11"); // Read all of the text returned by the HTTP server
-          BufferedReader in = new BufferedReader
-          (new InputStreamReader(connection.getInputStream()));
+          //BufferedReader in = new BufferedReader
+          //(new InputStreamReader(connection.getInputStream()));
         }
-        catch (IOException e) {
+        catch (Error e) {
         println(e);
         }
       int status = connection.getResponseCode();
@@ -157,11 +157,11 @@ class SmartCitizen {
           connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
           connection.setRequestProperty("Accept", "application/json");
           connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11"); // Read all of the text returned by the HTTP server
-          BufferedReader in = new BufferedReader
-          (new InputStreamReader(connection.getInputStream()));
+          //BufferedReader in = new BufferedReader
+          //(new InputStreamReader(connection.getInputStream()));
         }
-        catch (IOException e) {
-        //println(e);
+        catch (Error e) {
+        println(e);
         }
       int status = connection.getResponseCode();
       InputStream in;
