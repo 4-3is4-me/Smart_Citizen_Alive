@@ -138,6 +138,7 @@ void draw() {
   } else {
     pointLight(150,156,210, width/2, 0, 1500);
   }
+
   if (millis() - lastupdate > (updateinterval*1000)) {
     getlatst();
     getinfo();
@@ -563,11 +564,11 @@ void drawsea() {
   ///////////////////////////////////////////////////////////
   
   ///////////////////////////////////////////////////////////
-  fill(10, 60, 255);  // sea colour 
+  fill(40, 60, 255);  // sea colour 
   beginShape();
-  seax = seay;
+  //seax = seay;
   for (float x = 0; x <= width+20; x += 10) {
-    float y = map(noise(seax, seay), 0, 1, height*0.99, height*0.90);  // this one is the noise function
+    float y = map(noise(seax, seay), 0, 1, height*0.99, height*0.92);  // this one is the noise function
     vertex(x, y);
     seax += noiseadj;
   }
