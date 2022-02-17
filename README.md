@@ -1,11 +1,11 @@
 # Smart Citizen Alive
 #### Screenshots:
 
-![alt text](https://github.com/4-3is4-me/Smart_Citizen_Alive/Screenshots/screenshot1.png)
+![alt text](https://github.com/4-3is4-me/Smart_Citizen_Alive/blob/dev/Screenshots/screenshot1.png)
 
-![alt text](https://github.com/4-3is4-me/Smart_Citizen_Alive/Screenshots/screenshot2.png)
+![alt text](https://github.com/4-3is4-me/Smart_Citizen_Alive/blob/dev/Screenshots/screenshot2.png)
 
-![alt text](https://github.com/4-3is4-me/Smart_Citizen_Alive/Screenshots/screenshot3.png)
+![alt text](https://github.com/4-3is4-me/Smart_Citizen_Alive/blob/dev/Screenshots/screenshot3.png)
 
 
 
