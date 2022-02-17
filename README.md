@@ -13,11 +13,11 @@ Creative Landscape Dashboard for Smart Citizen kit data rebuilt by Tim Wornell,
 with code and inspiration from Lee at Plymouth College of Art as part of the Smart Citizen Programme June 2021, original project https://github.com/4-3is4-me/SmartCitizensProcessing.
 
 * Click your mouse to see the data overlay and to change kit ID and the number of days history drawn by the hills, default is 3.
-*Type a kit ID and use your up and down arrow keys to increase or decrease the number of days.
-*Hit enter to confirm the choices.
-*If a bad kit ID or one that is offline is entered, the kit will remain the same and only the number of days will be entered.
-*Click your mouse again to hide the overlay.
-*Enter default kitId as first line of "cnfig.txt" in data folder, get this from your kit URL on smartcitizen.me
+* Type a kit ID and use your up and down arrow keys to increase or decrease the number of days.
+* Hit enter to confirm the choices.
+* If a bad kit ID or one that is offline is entered, the kit will remain the same and only the number of days will be entered.
+* Click your mouse again to hide the overlay.
+* Enter default kitId as first line of "cnfig.txt" in data folder, get this from your kit URL on smartcitizen.me
 
 
 
