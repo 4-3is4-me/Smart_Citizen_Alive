@@ -1,6 +1,6 @@
 /*
-Dashboard for Smart Citizen kit data by Tim Wornell,
- with tutoring, code and inspiration from Lee at Plymouth College of Art as part of the Smart Citizen Programme June 2021.
+Dashboard for Smart Citizen kit data completely rebuilt by Tim Wornell, 
+ original tutoring, code and inspiration from Lee at Plymouth College of Art as part of the Smart Citizen Programme June 2021.
  
  # Click your mouse to see the data overlay and to change kit ID and the number of days history drawn by the hills, default is 3.
  # Type a kit ID and use your up and down arrow keys to increase or decrease the number of days.
@@ -75,7 +75,6 @@ boolean mouse = false;
 String typing = "";
 int newdays = 3;
 
-
 void settings() {
   fullScreen(P3D);
 }
@@ -119,7 +118,7 @@ void setup() {
   ey3 = targetY-5;
   ex4 = targetX;
   ey4 = targetY-5;
-
+  
   try {
     getlatst();
     getinfo();
@@ -132,7 +131,6 @@ void setup() {
 
 void draw() {
   // Lighting for shadows, to follow the sun/moon
-  //ambientLight(255, 255, 255, 0, 0, 0);
   if (day) {
     pointLight(254,255,234, sunX, sunY, 1500);
   } else {
@@ -161,8 +159,8 @@ void draw() {
   //// drawhill(sensor array, colour, colour, colour) -- Order is back to front, lightest to darkest
   //// drawgas(sensor, red, green, blue, mod)  -- mod changes the amount of screen it takes up
   //drawhill(batteryarr, 175, 175, 175);
-  drawgas("CO2", 0, 0, 0, 10.0); //black
-  drawgas("TVOC", 0, 255, 0, 1); // green
+  drawgas("CO2", 0, 0, 0, 10); //black
+  drawgas("TVOC", 0, 255, 0, 5); // green
   drawgas("PM1", 255, 0, 255, 0.15);  // pink
   drawgas("PM2.5", 255, 255, 0, 0.15); // yellow
   drawgas("PM10", 0, 255, 255, 0.15); //cyan
@@ -195,7 +193,7 @@ void getlatst() {
     JSONObject obj = sensors.getJSONObject(i);
     sensorlatst.set(str(obj.getInt("id")), obj.getFloat("value"));
   }
-  //println(sensorlatst.get(str(sensornums.get("Temperature"))));  // to get a sensor value
+  // sensorlatst.get(sensornums.get("Temperature"));  // to get a sensor value
 }
 /////////// get info ///////////////
 void getinfo() {
@@ -212,7 +210,7 @@ void getinfo() {
 
   city = location.getString("city");
   country  = location.getString("country");
-  //tags in here
+  //tags in here?
 
   String timestamp = data.getString("recorded_at");
   createtimes(timestamp, localtime, localsunrise, localsunset);
@@ -232,7 +230,6 @@ void createtimes(String timestamp, String localtime, String localsunrise, String
   }
   catch (Exception Error) {
     // will fail if there is no time adjustment eg. in the UK in winter, so we make it add nothing.
-    //println("error");
     defchar = "+";
     tadjustplus_minus = defchar.charAt(0);
     tadjust = "0";
@@ -339,7 +336,7 @@ void drawsky() {
   skygreen = 210;
   skyblue = 240 + darkness/4;
 
-  if (pressure < 101.8) {
+  if (pressure < 100.0) {    // 101.8 originally changed to lower for more blue sky!
     // grey sky
     skyred = skygreen;
   }
@@ -378,9 +375,8 @@ void drawsun() {
 
   //// sun rings, numbers change the colours
   color  sun1 = color(255, 255, 255);
-  color  sun2 = color(skyred + 20, skygreen + 20, skyblue + 20);  /// +40 is darker
-  //color  sun2 = color(skycol);
-  color  sun3 = color(skycol + 150, 0); //  + is lighter
+  color  sun2 = color(skycol);
+  color  sun3 = color(skycol, 0);
   float sunshine = int(light)/1000;
 
   noStroke();
@@ -392,7 +388,7 @@ void drawsun() {
     for (int x=0; x<circle_grad.width; x++) {
 
       float dis = dist(x, y, sunX, sunY);
-      dis = map(dis, 0, circle_grad.width, 0, 10 - sunshine);  // n - sunshine is size of blurry circle
+      dis = map(dis, 0, circle_grad.width, 0, 12   - sunshine);  // n - sunshine is size of blurry circle
 
       if (dis<2) {
         if (dis>1) {
@@ -457,7 +453,7 @@ void drawmoon() {
   fill(skycol);
   ellipse(moonX-width/140, moonY-3, height/moonsize, height/moonsize);   //-width/140
 
-  /*  //// moon temp
+  /*  //// moon temp  - I didn't like this
    color  moon1 = color(255,255-(red*25),255-(temperature*10),150);
    color  moon2 = color(skycol,0);
    
@@ -495,8 +491,6 @@ void drawhill(int[] ys, int red, int green, int blue) {
   fill(red, green, blue);
   beginShape();
   noStroke();
-  //stroke(red+1, green+1, blue+1);
-  //strokeWeight(1);
   int numberofvertex = ys.length;
 
   beginShape();
