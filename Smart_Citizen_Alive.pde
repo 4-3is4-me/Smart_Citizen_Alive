@@ -1,6 +1,6 @@
 /*
-Dashboard for Smart Citizen kit data completely rebuilt by Tim Wornell, 
- original tutoring, code and inspiration from Lee at Plymouth College of Art as part of the Smart Citizen Programme June 2021.
+Dashboard for Smart Citizen kit data completely rebuilt by Tim Wornell,
+original tutoring, code and inspiration from Lee at Plymouth College of Art as part of the Smart Citizen Programme June 2021.
  
  # Click your mouse to see the data overlay and to change kit ID and the number of days history drawn by the hills, default is 3.
  # Type a kit ID and use your up and down arrow keys to increase or decrease the number of days.
@@ -9,6 +9,8 @@ Dashboard for Smart Citizen kit data completely rebuilt by Tim Wornell,
  # Click your mouse again to hide the overlay.
  # Enter defaulty kitId as first line of "cnfig.txt" in data folder, get this from your kit URL on smartcitizen.me
  */
+
+/* UPDATED JULY 2022 AS METAWEATHER API IS OFFLINE. ALTERNATIVES FOUND.*/
 
 //// API class SmartCitizen
 int kitID;
@@ -80,7 +82,6 @@ void settings() {
 }
 
 void setup() {
-
   //fullScreen();
   /// edit this list for new sensors or if sensor ids ever change
   sensornums.set("TVOC", 113);
@@ -94,7 +95,6 @@ void setup() {
   sensornums.set("PM10", 88);
   sensornums.set("Humidity", 56);
   sensornums.set("Temperature", 55);
-
   fill(0);
   rect(0, 0, width, height);
   fill(255);
@@ -118,13 +118,13 @@ void setup() {
   ey3 = targetY-5;
   ex4 = targetX;
   ey4 = targetY-5;
-  
   try {
     getlatst();
     getinfo();
     gethills();
   }
   catch (Exception error) {
+    println("Error");
     exit();
   }
 }
@@ -136,7 +136,7 @@ void draw() {
   } else {
     pointLight(150,156,210, width/2, 0, 1500);
   }
-
+  
   if (millis() - lastupdate > (updateinterval*1000)) {
     getlatst();
     getinfo();
@@ -192,6 +192,7 @@ void getlatst() {
   for (int i = 0; i < len; i++) {
     JSONObject obj = sensors.getJSONObject(i);
     sensorlatst.set(str(obj.getInt("id")), obj.getFloat("value"));
+    //println(sensorlatst);
   }
   // sensorlatst.get(sensornums.get("Temperature"));  // to get a sensor value
 }
@@ -203,10 +204,38 @@ void getinfo() {
   Float lon = location.getFloat("longitude");
 
   SmartCitizen myinfo = new SmartCitizen(kitID);
-  JSONObject times = myinfo.gettimes(lat, lon);  // from metaweather API
-  String localtime = times.getString("time");
+  /* THIS IS NOT WORKING AS METAWEATGHER API IS DOWN SUMMER 2022
+  println("before meta");
+  JSONObject times = myinfo.gettimes(lat, lon);  // from metaweather API not working.....
+  String localtime = times.getString("time");    
+  // need api for current time/zone! get timezone precisly, time worldtime api and sunrise set from open-meteo.com
   String localsunrise = times.getString("sun_rise");
   String localsunset = times.getString("sun_set");
+  */
+  
+  //long timestamp = System.currentTimeMillis()/1000;
+  //println(lat+", "+lon+", "+timestamp);
+  //String timezoneURL = "https://timezones-api.datasette.io/timezones/by_point.json?longitude="+lon+"&latitude="+lat;
+  //JSONObject fetchtimezone = myinfo.gettimezone(lat, lon);
+  JSONObject fetchtimezone = myinfo.getObjectFromAPI(
+    "https://timezones-api.datasette.io/timezones/by_point.json?longitude="+lon+"&latitude="+lat);
+  JSONArray rows = fetchtimezone.getJSONArray("rows"); 
+  JSONArray rows2 = rows.getJSONArray(0);
+  String timezone = rows2.getString(0);
+  
+  //String localtimeURL = "http://worldtimeapi.org/api/timezone/"+timezone;
+  JSONObject fetchlocaltime = myinfo.getObjectFromAPI(
+    "https://worldtimeapi.org/api/timezone/"+timezone);
+  String localtime = fetchlocaltime.getString("datetime");
+  
+  JSONObject fetchriseandset = myinfo.getObjectFromAPI(
+    "https://api.open-meteo.com/v1/forecast?latitude="+lat+"&longitude="+lon+"&timezone="+timezone+"&daily=sunrise,sunset");
+  //println("https://api.open-meteo.com/v1/forecast?latitude="+lat+"&longitude="+lon+"&timezone="+timezone+"&daily=sunrise,sunset");
+  JSONObject daily = fetchriseandset.getJSONObject("daily");
+  JSONArray rise = daily.getJSONArray("sunrise");
+  String localsunrise = rise.getString(0);
+  JSONArray set = daily.getJSONArray("sunset");
+  String localsunset = set.getString(0);
 
   city = location.getString("city");
   country  = location.getString("country");

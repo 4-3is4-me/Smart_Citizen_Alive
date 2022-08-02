@@ -75,7 +75,7 @@ class SmartCitizen {
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  
+  /*
   JSONObject gettimes(float lat, float lon){
     JSONArray query = getArrayFromAPI("https://www.metaweather.com/api/location/search/?lattlong="+lat+","+lon);
     JSONObject result = query.getJSONObject(0);
@@ -83,8 +83,14 @@ class SmartCitizen {
     JSONObject request = getObjectFromAPI("https://www.metaweather.com/api/location/"+woe);
     return request;
   }
-
-
+  */
+  JSONObject gettimezone(float lat, float lon){
+    //long timestamp = cal.getTimeInMillis()/1000;
+    //long timestamp = System.currentTimeMillis()/1000;
+    JSONObject query = getObjectFromAPI(
+      "https://timezones-api.datasette.io/timezones/by_point.json?longitude="+lon+"&latitude="+lat);
+    return query;
+  }
 ///////////////////////// Below are the calls to the API ///////////////////////////  
   
   JSONArray getArrayFromAPI(String urlsite){
@@ -155,7 +161,7 @@ class SmartCitizen {
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
         try {
           connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-          connection.setRequestProperty("Accept", "application/json");
+          connection.setRequestProperty("Accept", "application/json; charset=utf-8");
           connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11"); // Read all of the text returned by the HTTP server
           //BufferedReader in = new BufferedReader
           //(new InputStreamReader(connection.getInputStream()));
